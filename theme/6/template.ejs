@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    @page { size: A4; margin: 14mm 14mm 14mm; }
+
+    :root{
+      --blue:#2b5d8a;
+      --text:#111;
+      --muted:#333;
+      --rule:#2b5d8a;
+    }
+
+    *{ margin:0; padding:0; box-sizing:border-box; }
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 9.6pt;
+      line-height: 1.28;
+      color: var(--text);
+      background:#fff;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+    .page{ width:210mm; min-height:297mm; }
+
+    /* Header (centered like screenshot) */
+    .header{ text-align:center; margin-bottom: 6mm; }
+    .name{
+      font-size: 20pt;
+      font-weight: 800;
+      color: var(--blue);
+      margin-bottom: 1mm;
+    }
+    .title{
+      font-size: 11pt;
+      font-style: italic;
+      color: var(--blue);
+      margin-bottom: 3mm;
+    }
+
+    .contacts{
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      flex-wrap:wrap;
+      gap: 0;
+      font-size: 8.6pt;
+      color:#111;
+    }
+    .contact-item{ display:inline-flex; align-items:center; }
+    .contact-item a{ color:#111; text-decoration:none; }
+    .contact-sep{ margin: 0 7px; color:#111; }
+
+    /* Section title + blue rule */
+    .section{ margin-top: 4.5mm; }
+    .section-title{
+      font-size: 9.2pt;
+      font-weight: 800;
+      letter-spacing: .6px;
+      text-transform: uppercase;
+      color: #111;
+      margin-bottom: 1.6mm;
+    }
+    .rule{ border: none; border-top: 1px solid var(--rule); margin-bottom: 2.6mm; }
+
+    /* Summary */
+    .summary{ font-size: 9.4pt; color:#111; }
+
+    /* Skills (inline groups) */
+    .skills-list{ font-size: 9.1pt; }
+    .skill-group{ margin-bottom: 1.6mm; }
+    .skill-title{ font-weight: 800; color:#111; }
+    .skill-items{ color:#111; }
+
+    /* Experience */
+    .exp-entry{ margin-bottom: 4.2mm;  }
+    .exp-top{
+      display:flex;
+      justify-content: space-between;
+      gap: 10mm;
+      align-items: baseline;
+      margin-bottom: 1.4mm;
+    }
+    .exp-left{
+      font-size: 9.6pt;
+      font-weight: 800;
+      color:#111;
+    }
+    .exp-left .exp-company {
+      font-style: italic;
+      font-weight: normal;
+    }
+    .exp-right{
+      text-align:right;
+      white-space:nowrap;
+      font-size: 8.8pt;
+      color:#111;
+    }
+
+    .bullets{
+      list-style: none;
+      padding-left: 0;
+      margin-top: 1mm;
+      font-size: 9.1pt;
+      color:#111;
+    }
+    .bullets li{
+      position: relative;
+      padding-left: 12px;
+      margin-bottom: 1.4mm;
+    }
+    .bullets li::before{
+      content:"•";
+      position:absolute;
+      left:0;
+      top:0;
+      color:#111;
+    }
+
+    /* Education */
+    .edu-row{
+      display:flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10mm;
+      font-size: 9.1pt;
+    }
+    .edu-left{ color:#111; }
+    .edu-left strong{ font-weight: 800; }
+    .edu-left em{ font-style: italic; }
+    .edu-right{ text-align:right; white-space:nowrap; font-size: 8.8pt; color:#111; }
+
+    /* Languages pills */
+    .lang-pills{ display:flex; gap: 8px; flex-wrap:wrap; }
+    .pill{
+      background: #1f4f73;
+      color:#fff;
+      font-weight: 700;
+      font-size: 8.4pt;
+      padding: 4px 10px;
+      border-radius: 3px;
+      line-height: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="name"><%= name %></div>
+      <% if (jobTitle) { %>
+        <div class="title"><%= jobTitle %></div>
+      <% } %>
+
+      <% if (contactItems && contactItems.length) { %>
+        <div class="contacts">
+          <% contactItems.forEach(function(c, idx){ %>
+            <span class="contact-item">
+              <% if (c.link) { %>
+                <a href="<%= c.link %>"><%= c.text %></a>
+              <% } else { %>
+                <span><%= c.text %></span>
+              <% } %>
+            </span>
+            <% if (idx !== contactItems.length - 1) { %>
+              <span class="contact-sep">|</span>
+            <% } %>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <!-- Summary -->
+    <% if (resume && resume.summary) { %>
+      <div class="section">
+        <div class="section-title">Summary</div>
+        <hr class="rule" />
+        <div class="summary"><%= resume.summary %></div>
+      </div>
+    <% } %>
+
+    <!-- Skills -->
+    <% if (skillGroups && skillGroups.length) { %>
+      <div class="section">
+        <div class="section-title">Skills</div>
+        <hr class="rule" />
+        <div class="skills-list">
+          <% skillGroups.forEach(function(sg){ %>
+            <div class="skill-group">
+              <span class="skill-title"><%= sg.title %>:</span>
+              <span class="skill-items" style="word-wrap: break-word;"><%= sg.skills.trim() %></span>
+            </div>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
+
+    <!-- Professional Experience -->
+    <% if (experiences && experiences.length) { %>
+      <div class="section">
+        <div class="section-title">Professional Experience</div>
+        <hr class="rule" />
+
+        <% experiences.forEach(function(exp){ %>
+          <div class="exp-entry">
+            <div class="exp-top">
+              <div class="exp-left">
+                <% if (exp.role) { %><%= exp.role %><% } %><% if (exp.company && exp.role) { %> <% } %><% if (exp.company) { %><span class="exp-company"><%= exp.company %></span><% } %>
+              </div>
+              <div class="exp-right">
+                <% 
+                  var right = [];
+                  if (exp.duration) right.push(exp.duration);
+                  if (exp.location) right.push(exp.location);
+                  var rightText = right.join(' | ');
+                %>
+                <% if (rightText) { %><div><%= rightText %><% if (exp.workPosition) { %><span> (<%= exp.workPosition %>)</span><% } %></div><% } %>
+              </div>
+            </div>
+
+            <% var items = (exp.items || []).filter(Boolean); %>
+            <% if (items.length) { %>
+              <ul class="bullets">
+                <% items.forEach(function(it){ %>
+                  <li><%= it %></li>
+                <% }) %>
+              </ul>
+            <% } %>
+          </div>
+        <% }) %>
+      </div>
+    <% } %>
+
+    <!-- Education -->
+    <% if (resume.educations && resume.educations.length > 0) { %>
+      <div class="section">
+        <div class="section-title">Education</div>
+        <hr class="rule" />
+        <% resume.educations && resume.educations.forEach(function(edu) { %>
+        <div class="edu-row">
+          <div class="edu-left">
+            <% if (edu.degree) { %>
+              <strong><%= edu.degree %></strong>
+            <% } %>
+            <% if (edu.university) { %>
+              <% if (edu.degree) { %>, <% } %><em><%= edu.university %></em>
+            <% } %>
+            <% if (edu.gpa) { %>
+              <div style="font-size:8.4pt;color:#555">GPA: <%= edu.gpa %></div>
+            <% } %>
+            <% if (edu.others) { %>
+              <div style="font-size:8.4pt;color:#555"><%= edu.others %></div>
+            <% } %>
+          </div>
+          <div class="edu-right">
+            <% var er = []; if (edu.duration) er.push(edu.duration); if (edu.location) er.push(edu.location); %>
+            <%= er.join(' | ') %>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <!-- Certificates -->
+    <% if (resume.certificates && resume.certificates.length > 0) { %>
+      <div class="section">
+        <div class="section-title">Certificates</div>
+        <hr class="rule" />
+        <% resume.certificates && resume.certificates.forEach(function(cert) { %>
+        <div class="edu-row">
+          <div class="edu-left">
+            <strong><%= cert.name %></strong>
+            <% if (cert.org) { %>, <em><%= cert.org %></em><% } %>
+          </div>
+          <div class="edu-right">
+            <%= cert.date || '' %>
+          </div>
+        </div>
+        <% }); %>
+      </div>
+    <% } %>
+
+    <!-- Languages -->
+    <% if (languages && languages.length) { %>
+      <div class="section">
+        <div class="section-title">Languages</div>
+        <hr class="rule" />
+
+        <div class="lang-pills">
+          <% languages.forEach(function(l){ %>
+            <span class="pill"><%= l.name %></span>
+          <% }) %>
+        </div>
+      </div>
+    <% } %>
+
+  </div>
+</body>
+</html>

@@ -1,0 +1,62 @@
+[
+  {
+    "id": "1",
+    "name": "Classic",
+    "description": "Clean single-column layout with contact icons, skill grid, and language dots",
+    "templateFile": "1/template.ejs"
+  },
+  {
+    "id": "2",
+    "name": "Atlantic Blue",
+    "description": "Sleek two-column layout with interactive elements and animations",
+    "templateFile": "2/template.ejs"
+  },
+  {
+    "id": "3",
+    "name": "Modern",
+    "description": "Sleek two-column layout with interactive elements and animations",
+    "templateFile": "3/template.ejs"
+  },
+  {
+    "id": "4",
+    "name": "Corporate",
+    "description": "Professional one-column layout with clean design and structured sections",
+    "templateFile": "4/template.ejs"
+  },
+  {
+    "id": "5",
+    "name": "True Blue",
+    "description": "Bold layout with vibrant colors and dynamic skill bars",
+    "templateFile": "5/template.ejs"
+  },
+  {
+    "id": "6",
+    "name": "Precision Line",
+    "description": "Minimalist design with precise alignment, subtle colors, and clear typography",
+    "templateFile": "6/template.ejs"
+  },
+  {
+    "id": "7",
+    "name": "Clean Slate",
+    "description": "Simple and elegant design with ample white space and a focus on content",
+    "templateFile": "7/template.ejs"
+  },
+  {
+    "id": "8",
+    "name": "Saferon Line",
+    "description": "Professional and modern design with a focus on clarity, featuring a clean layout and subtle color accents",
+    "templateFile": "8/template.ejs"
+  },
+  {
+    "id": "9",
+    "name": "Charcole Glow",
+    "description": "Dark and sophisticated design with a charcoal background, glowing accents, and a sleek layout",
+    "templateFile": "9/template.ejs"
+  },
+  {
+    "id": "10",
+    "name": "Marcos",
+    "description": "Elegant and modern design with a focus on typography, featuring a clean layout and subtle color palette",
+    "templateFile": "10/template.ejs"
+  }
+]

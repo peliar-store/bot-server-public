@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <style>
+    @page { size: A4; margin: 14mm 14mm 14mm; }
+
+    :root{
+      --ink:#111;
+      --muted:#333;
+      --rule:#4f4f4f;
+      --blue:#1f4e79; /* subtle blue like screenshot icons */
+    }
+
+    *{ margin:0; padding:0; box-sizing:border-box; }
+    body{
+      font-family: Arial, Helvetica, sans-serif;
+      font-size:10pt;
+      line-height:1.35;
+      color:var(--ink);
+      background:#fff;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .page{ width:210mm; min-height:297mm; }
+
+    /* Header (left aligned) */
+    .header{ margin-bottom: 10px; }
+    .name{ font-size:22pt; font-weight:800; color:#111; }
+    .title{ font-size:12pt; margin-top:2px; color:#111; }
+
+    .contacts{
+      margin-top: 8px;
+      display:flex;
+      flex-wrap:wrap;
+      gap:8px 18px;
+      font-size:9pt;
+      color:#111;
+    }
+    .contact-item{ display:inline-flex; align-items:center; gap:6px; white-space:nowrap; }
+    .contact-item svg{ width:12px; height:12px; fill:#111; }
+    .contact-item a{ color:#111; text-decoration:none; }
+
+    /* Two-column layout */
+    .grid{
+      display:grid;
+      grid-template-columns: 1.55fr 1fr; /* left wider */
+      gap: 18px;
+      margin-top: 10px;
+    }
+
+    /* Section header with top rule and bottom rule (matches screenshot) */
+    .sec{ margin-bottom: 12px; }
+    .sec-head{
+      text-align:center;
+      font-weight:800;
+      font-size:10pt;
+      color:#111;
+      padding: 3px 0;
+      border-top: 2px solid var(--rule);
+      border-bottom: 2px solid var(--rule);
+      margin: 8px 0 8px;
+    }
+
+    /* Summary */
+    .summary{ font-size:9.2pt; color:#111; }
+
+    /* Skills sidebar blocks */
+    .skill-group{ margin-bottom: 8px; }
+    .skill-title{ font-weight:800; font-size:9.3pt; margin-bottom:2px; }
+    .skill-items{ font-size:9.1pt; color:#111; }
+
+    /* Experience */
+    .exp-entry{ margin-bottom: 12px;}
+    .exp-role{ font-weight:800; font-size:10pt; }
+    .exp-company{ font-weight:normal; font-size:9.4pt; margin-top:2px; }
+    .exp-meta{ font-size:9pt; color:#111; margin-top:2px; }
+    .exp-meta em{ font-style: normal; }
+
+    .bullets{ margin-top: 6px; padding-left: 16px; font-size:9.1pt; }
+    .bullets li{ margin-bottom: 3px; }
+
+    /* Education */
+    .edu-degree{ font-weight:800; font-size:9.4pt; }
+    .edu-school{ font-size:9.2pt; }
+    .edu-meta{ font-size:9.1pt; margin-top:2px; }
+
+    /* Languages */
+    .lang-list{ font-size:9.2pt; display: flex; flex-direction: column; gap: 4px; }
+    .lang-list li{ margin-bottom: 3px; }
+
+    /* Keep sidebar compact */
+    .sidebar .sec{ margin-bottom: 14px; }
+
+    .lang-dots {
+      display: flex;
+      gap: 4px;
+    }
+    .lang-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #000;
+    }
+    .lang-dot-empty {
+      background: transparent;
+      border: 1px solid #999;
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+
+    <!-- Header -->
+    <div class="header">
+      <div class="name"><%= name %></div>
+      <% if (jobTitle) { %>
+        <div class="title"><%= jobTitle %></div>
+      <% } %>
+
+      <% if (contactItems && contactItems.length) { %>
+        <div class="contacts">
+          <% contactItems.forEach(function(c){ %>
+            <span class="contact-item">
+              <% if (c.iconFile) { %><%- c.iconFile %><% } %>
+              <% if (c.link) { %>
+                <a href="<%= c.link %>"><%= c.text %></a>
+              <% } else { %>
+                <span><%= c.text %></span>
+              <% } %>
+            </span>
+          <% }) %>
+        </div>
+      <% } %>
+    </div>
+
+    <div class="grid">
+
+      <!-- LEFT COLUMN -->
+      <div class="main">
+
+        <% if (resume && resume.summary) { %>
+          <div class="sec">
+            <div class="sec-head">Summary</div>
+            <div class="summary"><%= resume.summary %></div>
+          </div>
+        <% } %>
+
+        <% if (experiences && experiences.length) { %>
+          <div class="sec">
+            <div class="sec-head">Professional Experience</div>
+
+            <% experiences.forEach(function(exp){ %>
+              <div class="exp-entry">
+                <% if (exp.role) { %><div class="exp-role"><%= exp.role %></div><% } %>
+                <% if (exp.company) { %><div class="exp-company"><%= exp.company %></div><% } %>
+
+                <div class="exp-meta">
+                  <% 
+                    var metaParts = [];
+                    if (exp.duration) metaParts.push(exp.duration);
+                    if (exp.location) metaParts.push(exp.location);
+                    var meta = metaParts.join(' | ');
+                  %>
+                  <% if (meta) { %><%= meta %><% } %>
+                  <% if (exp.workPosition) { %> (<%= exp.workPosition %>)<% } %>
+                </div>
+
+                <% var items = (exp.items || []).filter(Boolean); %>
+                <% if (items.length) { %>
+                  <ul class="bullets">
+                    <% items.forEach(function(it){ %>
+                      <li><%= it %></li>
+                    <% }) %>
+                  </ul>
+                <% } %>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+
+      </div>
+
+      <!-- RIGHT COLUMN (SIDEBAR) -->
+      <div class="sidebar">
+
+        <% if (skillGroups && skillGroups.length) { %>
+          <div class="sec">
+            <div class="sec-head">Skills</div>
+            <% skillGroups.forEach(function(sg){ %>
+              <div class="skill-group">
+                <div class="skill-title"><%= sg.title %></div>
+                <div class="skill-items" style="word-wrap: break-word;"><% sg.skills.split('\n').filter(function(s){ return s.trim(); }).forEach(function(skill){ %><div><%= skill.trim() %></div><% }); %></div>
+              </div>
+            <% }) %>
+          </div>
+        <% } %>
+
+        <% if (resume.educations && resume.educations.length > 0) { %>
+          <div class="sec">
+            <div class="sec-head">Education</div>
+            <% resume.educations && resume.educations.forEach(function(edu) { %>
+              <div class="edu-degree"><%= edu.degree || '' %></div>
+              <div class="edu-school"><%= edu.university || '' %></div>
+              <% if (edu.gpa) { %><div style="font-size:8.5pt;color:#666">GPA: <%= edu.gpa %></div><% } %>
+              <% if (edu.others) { %><div style="font-size:8.5pt;color:#666"><%= edu.others %></div><% } %>
+              <div class="edu-meta">
+                <% var ep = []; if (edu.duration) ep.push(edu.duration); if (edu.location) ep.push(edu.location); %>
+                <%= ep.join(' | ') %>
+              </div>
+            <% }); %>
+          </div>
+        <% } %>
+
+        <% if (resume.certificates && resume.certificates.length > 0) { %>
+          <div class="sec">
+            <div class="sec-head">Certificates</div>
+            <% resume.certificates && resume.certificates.forEach(function(cert) { %>
+              <div class="edu-degree"><%= cert.name %></div>
+              <% if (cert.org) { %><div class="edu-school"><%= cert.org %></div><% } %>
+              <div class="edu-meta"><%= cert.date || '' %></div>
+            <% }); %>
+          </div>
+        <% } %>
+
+        <% if (languages && languages.length) { %>
+          <div class="sec">
+            <div class="sec-head">Languages</div>
+            <div class="lang-list">
+              <% languages.forEach(function(l){ %>
+                <p style="display: flex;justify-content: space-between;align-items: center;"><%= l.name %>
+                  <% if (l.level > 1) { %>
+                    <span class="lang-dots">
+                      <% for (var d = 0; d < 5; d++) { %>
+                        <span class="lang-dot<%= d < l.level ? '' : ' lang-dot-empty' %>"></span>
+                      <% } %>
+                    </span>
+                  <% } %>
+                </p>
+              <% }) %>
+            </div>
+          </div>
+        <% } %>
+
+      </div>
+
+    </div>
+  </div>
+</body>
+</html>
